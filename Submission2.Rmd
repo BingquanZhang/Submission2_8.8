@@ -19,6 +19,7 @@ data <- genes_df %>%
   gather(key=participant_id, value="expression", -X) %>%
   inner_join(ser_df, by="participant_id")
 
+make_plots <- function(data, gene, numeric_var, category_var1, category_var2){
   df <- data %>% filter(X==gene)
   p1 <- ggplot(df, aes(x=expression)) +
     geom_histogram(fill = "blue", color = "black") +
