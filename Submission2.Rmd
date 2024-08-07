@@ -1,0 +1,41 @@
+---
+title: "Assignment"
+output:
+  pdf_document: default
+  html_document: default
+date: "2024-08-06"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+
+```{r}
+library(tidyverse)
+genes_df <- read.csv("/Users/zhangbingquan/Desktop/Fdn of data science/7.1-8.1/QBS103_GSE157103_genes.csv")
+ser_df <- read.csv("/Users/zhangbingquan/Desktop/Fdn of data science/7.1-8.1/QBS103_GSE157103_series_matrix.csv",na.strings = "unknown")
+data <- genes_df %>%
+  gather(key=participant_id, value="expression", -X) %>%
+  inner_join(ser_df, by="participant_id")
+
+  df <- data %>% filter(X==gene)
+  p1 <- ggplot(df, aes(x=expression)) +
+    geom_histogram(fill = "blue", color = "black") +
+    labs(title = paste0("Histogram of ", gene," Gene Expression"),x = "Expression", y = "Frequency")
+  p2 <- ggplot(df, aes_string(x = numeric_var, y = "expression")) +geom_point(color = "red") +
+    labs(title = paste0("Scatterplot of ", gene, " Expression and ",  numeric_var), y="Expression")
+  p3 <- ggplot(df, aes_string(x = category_var1, y = "expression", fill = category_var2)) +
+    geom_boxplot() +
+    labs(y="Expression")
+  print(p1)
+  print(p2)
+  print(p3)
+}
+genes <- c("A1BG", "ABCF1", "ABI2")
+for(gene in genes){
+  make_plots(data, gene, "fibrinogen", "sex", "icu_status")
+}
+
+```
+
